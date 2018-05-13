@@ -171,7 +171,7 @@ exports.randomPlay = (req, res, next) => {
                 return quizzes[0];
             });
         }).catch(error => {
-            req.flash('error', 'Error deleting the Quiz: ' + error.message);
+            req.flash('error', 'Error: ' + error.message);
             next(error);
         });
     }).then(quiz =>{
