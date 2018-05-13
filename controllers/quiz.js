@@ -192,7 +192,7 @@ exports.randomPlay = (req, res, next) => {
 // GET /quizzes/randomcheck/:Quizid
 exports.randomCheck = (req, res, next) => {
     let score = req.session.resolved.length;
-    const answer = req.query.answer;
+    const answer = req.query.answer || "";
     const result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
     if(result){
         if(req.session.resolved.indexOf(req.quiz.id)=== -1){
