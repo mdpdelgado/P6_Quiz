@@ -158,10 +158,11 @@ exports.check = (req, res, next) => {
 exports.randomPlay = (req, res, next) => {
     if(req.session.resolved === undefined){
         req.session.resolved = [];
-    };
+    }
     Sequelize.Promise.resolve().then(() =>{
         const whereOpt = {"id":{[Sequelize.Op.notIn]:req.session.resolved}};
-        return models.quiz.count({where: whereOpt}).then(count => {
+        return models.quiz.count({where: whereOpt})
+            .then(count => {
             let ran = Math.floor(Math.random()*count);
             return models.quiz.findAll({
                 offset:ran,
@@ -191,13 +192,14 @@ exports.randomPlay = (req, res, next) => {
 
 // GET /quizzes/randomcheck/:Quizid
 exports.randomCheck = (req, res, next) => {
-    let score = req.session.resolved.length;
+    let score = req.session.resolved.length || 0;
     const answer = req.query.answer || "";
-    const result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    const result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim() || 0;
     if(result){
         if(req.session.resolved.indexOf(req.quiz.id)=== -1){
             req.session.resolved.push(req.quiz.id);
             score = req.session.resolved.length;
+
         }
     }else{
         delete req.session.resolved;
